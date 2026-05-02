@@ -16,14 +16,15 @@ namespace Castle.Components.DictionaryAdapter
 {
 	using System;
 	using System.Collections;
+	using System.Collections.Concurrent;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
 	using System.Reflection.Emit;
 	using System.Threading;
-	using System.Diagnostics;
 
 	using Castle.Components.DictionaryAdapter.Xml;
 	using Castle.Core.Internal;
@@ -34,8 +35,8 @@ namespace Castle.Components.DictionaryAdapter
 	/// </summary>
 	public class DictionaryAdapterFactory : IDictionaryAdapterFactory
 	{
-		private readonly SynchronizedDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
-			new SynchronizedDictionary<Type, DictionaryAdapterMeta>();
+		private readonly ConcurrentDictionary<Type, DictionaryAdapterMeta> interfaceToMeta =
+			new ConcurrentDictionary<Type, DictionaryAdapterMeta>();
 
 		#region IDictionaryAdapterFactory
 
@@ -132,8 +133,8 @@ namespace Castle.Components.DictionaryAdapter
 					descriptor = other.CreateDescriptor();
 				}
 
-				var typeBuilder = CreateTypeBuilder(type);
-				return CreateAdapterMeta(type, typeBuilder, descriptor);
+				var typeBuilder = CreateTypeBuilder(t);
+				return CreateAdapterMeta(t, typeBuilder, descriptor);
 			});
 		}
 
