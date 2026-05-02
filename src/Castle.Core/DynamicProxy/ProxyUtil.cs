@@ -17,12 +17,11 @@
 namespace Castle.DynamicProxy
 {
 	using System;
-	using System.Collections.Generic;
+	using System.Collections.Concurrent;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-	using System.Threading;
 
 	using Castle.Core.Internal;
 	using Castle.DynamicProxy.Generators;
@@ -30,7 +29,7 @@ namespace Castle.DynamicProxy
 
 	public static class ProxyUtil
 	{
-		private static readonly SynchronizedDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new SynchronizedDictionary<Assembly, bool>();
+		private static readonly ConcurrentDictionary<Assembly, bool> internalsVisibleToDynamicProxy = new ConcurrentDictionary<Assembly, bool>();
 
 		/// <summary>
 		///   Creates a delegate of the specified type to a suitable `Invoke` method
